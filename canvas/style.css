@@ -1,0 +1,56 @@
+*,
+*::after,
+*::before {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+body {
+	background-color: #212121;
+	width: 100%;
+	height: 100vh;
+	overflow: hidden;
+}
+
+.canvas-container {
+	width: 100%;
+	height: 100vh;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	image-rendering: pixelated;
+	transform: scale(20, 20);
+}
+
+#canvas {
+	background-color: white;
+	/* margin: 0 auto; */
+}
+
+.color-selector {
+	max-width: 90%;
+	position: fixed;
+	bottom: 20px;
+	left: 50%;
+	padding: 20px 16px;
+	border-radius: 8px;
+	transform: translateX(-50%);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: #424242;
+}
+
+.color-option {
+	width: 40px;
+	height: 40px;
+	margin: 0 4px;
+	cursor: pointer;
+	border: 0;
+	transition: scale 150ms ease;
+}
+.selected-color {
+	scale: 1.2;
+	border: 2px solid white;
+}
