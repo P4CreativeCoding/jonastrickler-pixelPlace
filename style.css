@@ -1,0 +1,46 @@
+*,
+*::after,
+*::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #252525;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#canvas {
+  background-color: white;
+  margin: 0 auto;
+}
+
+.color-selector {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  padding: 20px 10px;
+  border-radius: 8px;
+  transform: translateX(-50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #fff;
+}
+
+.color-option {
+  width: 50px;
+  height: 50px;
+  margin: 0 10px;
+  cursor: pointer;
+
+  transition: scale 150ms ease;
+}
+.selected-color {
+  scale: 1.2;
+}
