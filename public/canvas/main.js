@@ -91,7 +91,7 @@ canvas.addEventListener("mouseup", function (e) {
 		let rect = canvas.getBoundingClientRect();
 		// let x = e.clientX - rect.left - zoom / 2;
 		let x = e.clientX - rect.left;
-		let y = e.clientY - rect.top - zoom / 2;
+		let y = e.clientY - rect.top;
 		console.log(x, y);
 
 		let xPos = Math.floor(x / squareSize);
