@@ -17,10 +17,13 @@ const colors = [
 	"rgb(255, 69, 0)",
 ];
 const express = require("express");
+const { disconnect } = require("process");
 const app = express();
 const server = require("http").createServer(app);
 const io = require("socket.io")(server);
 const port = process.env.PORT || 3000;
+const loginData = require("./login-data.json");
+const bodyParser = require("body-parser");
 
 const canvasSize = 128;
 const canvasArr = [];
@@ -30,6 +33,8 @@ for (let i = 0; i < canvasSize; i++) {
 	}
 }
 
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + "/public"));
 
 io.on("connection", (socket) => {
@@ -41,10 +46,27 @@ io.on("connection", (socket) => {
 
 		io.emit("pixelReceived", data);
 	});
-});
 
+	socket.on("disconnect", () => {
+		console.log("a user disconnected");
+	});
+});
 app.get("/api/canvas", (req, res) => {
 	res.json(canvasArr);
+});
+
+app.post("/login", (req, res) => {
+	const { username, password } = req.body;
+	console.log("login tried with: " + username + " " + password);
+	const user = loginData.users.find(
+		(user) => user.username === username && user.password === password
+	);
+
+	if (user) {
+		res.json({ valid: true });
+	} else {
+		res.json({ valid: false });
+	}
 });
 
 server.listen(port, function () {

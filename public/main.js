@@ -4,11 +4,25 @@ const form = document.getElementById("auth-form");
 
 form.addEventListener("submit", (e) => {
 	e.preventDefault();
-	if (username.value === "Jona" && password.value === "password") {
-		window.location.href = "/canvas";
-		console.log("logged in");
-	} else {
-		username.value = "";
-		password.value = "";
-	}
+
+	fetch("https://pixelplace.adaptable.app/login", {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+		},
+		body: JSON.stringify({
+			username: username.value,
+			password: password.value,
+		}),
+	})
+		.then((res) => res.json())
+		.then((data) => {
+			console.log(data);
+			if (data.valid === true) {
+				window.location.href = "/canvas";
+			} else if (data.valid === false) {
+				username.value = "";
+				password.value = "";
+			}
+		});
 });

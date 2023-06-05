@@ -53,18 +53,6 @@ colorOptions.forEach(function (colorOption) {
 });
 
 // ---navigation---
-// zoom
-container.addEventListener("wheel", (e) => {
-	if (e.deltaY < 0) {
-		zoom += zoomSpeed;
-	} else if (e.deltaY > 0 && zoom > 1) {
-		zoom -= zoomSpeed;
-	}
-	container.style.transform = `scale(${zoom}, ${zoom})`;
-	squareSize = zoom;
-});
-
-// pan
 let isDragging = false;
 let initialTranslation = { x: 0, y: 0 };
 let translation = { x: 0, y: 0 };
@@ -72,6 +60,21 @@ let startCoords = { x: 0, y: 0 };
 let downPos = { x: 0, y: 0 };
 const threshold = 4;
 
+// zoom
+container.addEventListener("wheel", (e) => {
+	if (e.deltaY < 0 && zoom < 18) {
+		zoom += zoomSpeed;
+	} else if (e.deltaY > 0 && zoom > 1) {
+		zoom -= zoomSpeed;
+	}
+	container.style.transform = `scale(${zoom}, ${zoom})`;
+	canvas.style.transform = `translate(${translation.x / zoom}px, ${
+		translation.y / zoom
+	}px)`;
+	squareSize = zoom;
+});
+
+// pan
 container.addEventListener("mousedown", function (e) {
 	isDragging = true;
 	startCoords.x = e.clientX;
@@ -101,14 +104,10 @@ container.addEventListener("mousemove", function (e) {
 			container.style.cursor = "move";
 
 			// updating canvas position
-			// console.log(canvas.style.transform);
 			console.log(translation);
 			canvas.style.transform = `translate(${translation.x / zoom}px, ${
 				translation.y / zoom
 			}px)`;
-			// canvas.style.transform = `translate(${
-			// 	initialTranslation + translation.x / zoom
-			// }px, ${initialTranslation + translation.y / zoom}px)`;
 		}
 	}
 });
