@@ -17,12 +17,12 @@ const rgbas = [
 	[255, 69, 0, 255],
 ];
 const container = document.querySelector(".canvas-container");
-container.style.transform = "scale(20, 20)";
+container.style.transform = "scale(6, 6)";
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 const colorOptions = document.querySelectorAll(".color-option");
 
-fetch("http://localhost:3000/api/canvas")
+fetch("https://pixelplace.adaptable.app/api/canvas")
 	.then((res) => res.json())
 	.then((data) => {
 		let canvasImg = [];
@@ -36,8 +36,8 @@ fetch("http://localhost:3000/api/canvas")
 	.catch((err) => console.error(err));
 
 let selectedColor = "rgb(0, 0, 0)";
-let zoom = 20;
-const zoomSpeed = 2;
+let zoom = 6;
+const zoomSpeed = 1;
 const squareCount = canvas.width;
 let squareSize = zoom;
 
@@ -57,7 +57,7 @@ colorOptions.forEach(function (colorOption) {
 container.addEventListener("wheel", (e) => {
 	if (e.deltaY < 0) {
 		zoom += zoomSpeed;
-	} else if (e.deltaY > 0 && zoom > 2) {
+	} else if (e.deltaY > 0 && zoom > 1) {
 		zoom -= zoomSpeed;
 	}
 	container.style.transform = `scale(${zoom}, ${zoom})`;
@@ -66,8 +66,9 @@ container.addEventListener("wheel", (e) => {
 
 // pan
 let isDragging = false;
-let startCoords = { x: 0, y: 0 };
+let initialTranslation = { x: 0, y: 0 };
 let translation = { x: 0, y: 0 };
+let startCoords = { x: 0, y: 0 };
 let downPos = { x: 0, y: 0 };
 const threshold = 4;
 
@@ -81,6 +82,7 @@ container.addEventListener("mousedown", function (e) {
 container.addEventListener("mouseup", () => {
 	isDragging = false;
 	container.style.cursor = "default";
+	initialTranslation = translation;
 });
 container.addEventListener("mousemove", function (e) {
 	if (isDragging) {
@@ -99,9 +101,14 @@ container.addEventListener("mousemove", function (e) {
 			container.style.cursor = "move";
 
 			// updating canvas position
+			// console.log(canvas.style.transform);
+			console.log(translation);
 			canvas.style.transform = `translate(${translation.x / zoom}px, ${
 				translation.y / zoom
 			}px)`;
+			// canvas.style.transform = `translate(${
+			// 	initialTranslation + translation.x / zoom
+			// }px, ${initialTranslation + translation.y / zoom}px)`;
 		}
 	}
 });
@@ -136,25 +143,3 @@ socket.on("pixelReceived", (data) => {
 	ctx.strokeStyle = "rgba(0, 0, 0, 0)";
 	ctx.fillRect(data.x, data.y, squareSize / zoom, squareSize / zoom);
 });
-
-function drawLine(a, b, c, d) {
-	ctx.beginPath();
-	ctx.moveTo(a, b);
-	ctx.lineTo(c, d);
-	ctx.stroke();
-}
-
-function drawBorders() {
-	ctx.strokeStyle = "lightgray";
-	ctx.lineWidth = 1;
-
-	for (let row = 0; row <= squareCount - 1; row++) {
-		for (let col = 0; col <= squareCount - 1; col++) {
-			let xPos = col * squareSize;
-			let yPos = row * squareSize;
-
-			drawLine(xPos, yPos, xPos + squareSize, yPos);
-			drawLine(xPos, yPos, xPos, yPos + squareSize);
-		}
-	}
-}

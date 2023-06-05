@@ -22,7 +22,7 @@ const server = require("http").createServer(app);
 const io = require("socket.io")(server);
 const port = process.env.PORT || 3000;
 
-const canvasSize = 32;
+const canvasSize = 128;
 const canvasArr = [];
 for (let i = 0; i < canvasSize; i++) {
 	for (let j = 0; j < canvasSize; j++) {
