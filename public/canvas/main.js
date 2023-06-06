@@ -30,7 +30,7 @@ fetch("https://pixelplace.adaptable.app/api/canvas")
 			const rgba = rgbas[color];
 			canvasImg = canvasImg.concat(rgba);
 		});
-		const imgData = new ImageData(new Uint8ClampedArray(canvasImg), 32);
+		const imgData = new ImageData(new Uint8ClampedArray(canvasImg), 128);
 		ctx.putImageData(imgData, 0, 0);
 	})
 	.catch((err) => console.error(err));
